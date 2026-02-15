@@ -44,15 +44,13 @@ function drawText() {
         "Dan sekali lagi… maaf ya, Kaka 🤍"
     ];
 
-    // 🔥 waktu per kalimat (lebih cepat)
-    let framePerLine = 25; // 25 frame ≈ 0.4 detik
+    let framePerLine = 25;
     let index = Math.floor(frameNumber / framePerLine);
 
     if (index >= fullMessage.length) {
         index = fullMessage.length - 1;
     }
 
-    // tampilkan maksimal 4 baris sekaligus biar gak panjang banget
     let start = Math.max(0, index - 3);
     let end = index + 1;
 
