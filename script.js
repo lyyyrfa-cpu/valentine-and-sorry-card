@@ -1,10 +1,33 @@
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+var frameNumber = 0;
+
+// ================= MAIN LOOP =================
+function draw() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawHearts();
+    drawText();
+    drawBunny();
+
+    frameNumber++;
+    requestAnimationFrame(draw);
+}
+
+draw();
+
+// ================= TEXT =================
 function drawText() {
-    var fontSize = Math.min(22, window.innerWidth / 26);
-    var lineHeight = 10;
+
+    var fontSize = Math.min(22, window.innerWidth / 25);
+    var lineHeight = 8;
 
     context.font = fontSize + "px Comic Sans MS";
     context.textAlign = "center";
-
     context.fillStyle = "rgb(255,105,180)";
     context.shadowColor = "rgba(255,105,180,0.8)";
     context.shadowBlur = 8;
@@ -44,21 +67,108 @@ function drawText() {
         "Dan sekali lagi… maaf ya, Kaka 🤍"
     ];
 
-    let framePerLine = 25;
-    let index = Math.floor(frameNumber / framePerLine);
+    let framePerLine = 20; // cepat tapi masih kebaca
+    let currentIndex = Math.floor(frameNumber / framePerLine);
 
-    if (index >= fullMessage.length) {
-        index = fullMessage.length - 1;
+    if (currentIndex >= fullMessage.length) {
+        currentIndex = fullMessage.length - 1;
     }
 
-    let start = Math.max(0, index - 3);
-    let end = index + 1;
+    // tampilkan maksimal 4 baris biar rapi
+    let start = Math.max(0, currentIndex - 3);
+    let yStart = canvas.height / 2;
 
-    for (let i = start; i < end; i++) {
+    for (let i = start; i <= currentIndex; i++) {
         context.fillText(
             fullMessage[i],
             canvas.width / 2,
-            canvas.height / 2 + (i - start) * (fontSize + lineHeight)
+            yStart + (i - start) * (fontSize + lineHeight)
         );
     }
+}
+
+// ================= HEARTS =================
+function drawHearts() {
+
+    drawHeart(canvas.width / 4,
+        canvas.height / 4 + Math.sin(frameNumber * 0.1) * 10,
+        40);
+
+    drawHeart(canvas.width * 0.8,
+        canvas.height / 3 + Math.sin(frameNumber * 0.1) * 10,
+        30);
+}
+
+function drawHeart(x, y, size) {
+    context.save();
+    context.beginPath();
+
+    context.moveTo(x, y);
+    context.bezierCurveTo(
+        x - size / 2, y - size / 2,
+        x - size, y + size / 3,
+        x, y + size
+    );
+
+    context.bezierCurveTo(
+        x + size, y + size / 3,
+        x + size / 2, y - size / 2,
+        x, y
+    );
+
+    context.fillStyle = "pink";
+    context.shadowColor = "rgba(255,20,147,0.8)";
+    context.shadowBlur = 15;
+    context.fill();
+    context.restore();
+}
+
+// ================= BUNNY =================
+function drawBunny() {
+
+    let x = canvas.width / 2;
+    let y = canvas.height - 120;
+    let size = 80;
+
+    context.save();
+
+    // kepala
+    context.beginPath();
+    context.arc(x, y, size / 2, 0, Math.PI * 2);
+    context.fillStyle = "white";
+    context.fill();
+
+    // telinga kiri
+    context.beginPath();
+    context.ellipse(x - size / 4, y - size / 1.2,
+        size / 6, size / 2, 0, 0, Math.PI * 2);
+    context.fill();
+
+    // telinga kanan
+    context.beginPath();
+    context.ellipse(x + size / 4, y - size / 1.2,
+        size / 6, size / 2, 0, 0, Math.PI * 2);
+    context.fill();
+
+    // mata
+    context.fillStyle = "black";
+    context.beginPath();
+    context.arc(x - size / 6, y - size / 8, 3, 0, Math.PI * 2);
+    context.arc(x + size / 6, y - size / 8, 3, 0, Math.PI * 2);
+    context.fill();
+
+    // hidung
+    context.fillStyle = "pink";
+    context.beginPath();
+    context.arc(x, y + size / 8, 4, 0, Math.PI * 2);
+    context.fill();
+
+    // blush
+    context.fillStyle = "rgba(255,182,193,0.8)";
+    context.beginPath();
+    context.arc(x - size / 3, y + size / 8, 6, 0, Math.PI * 2);
+    context.arc(x + size / 3, y + size / 8, 6, 0, Math.PI * 2);
+    context.fill();
+
+    context.restore();
 }
