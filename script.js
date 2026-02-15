@@ -42,6 +42,7 @@ window.onload = function () {
         "yang begitu berarti buat aku.",
         "",
         "Dan sekali lagi… maaf ya, Kaka 🤍"
+        "dadahhh, btw ini aku coding, baru banget belajar coding buat ngucapin ini, jadii maaf kalau kurengg hehe"
     ];
 
     // 💖 TOTAL 6 DETIK PER KALIMAT
